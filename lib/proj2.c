@@ -34,61 +34,60 @@ int moveBlock(Stack **origin, Stack **destiny){
     return 0;
 }
 
-void movePyr(Stack *stack_1, FILE **outputFile, int numBlocks){
+int movePyr(Stack *stack_1, FILE **outputFile, int numBlocks){
     Stack *stack_2=initiateStackWithType(2), *stack_3=initiateStackWithType(3);
     data a;
+    int numMovs=0;
     //Stack *stack_2=initiateStack(), *stack_3=initiateStack();
-    moveStyleHanoi(numBlocks, stack_1, stack_2, stack_3, outputFile);
-    printf("Stack 3(destiny): \n");
-    No *no = stack_3->prox;
-    while(no!=NULL){
-        if(no->value.repeat > 0){
-            printf("%ld %ld (more than one block treated as one)\n", no->value.weight, no->value.capacity);
-        }else{
-            printf("%ld %ld\n", no->value.weight, no->value.capacity);
+    moveStyleHanoi(&numMovs, numBlocks, stack_1, stack_2, stack_3, outputFile);
+    if(numMovs <= 3000000){
+        printf("Stack 3(destiny): \n");
+        No *no = stack_3->prox;
+        while(no!=NULL){
+            if(no->value.repeat > 0){
+                printf("%ld %ld (more than one block treated as one)\n", no->value.weight, no->value.capacity);
+            }else{
+                printf("%ld %ld\n", no->value.weight, no->value.capacity);
+            }
+            no = no->prox;
         }
-        no = no->prox;
+        freeStack(stack_3);
+        return 1;
+    }else{
+        freeStack(stack_3);
+        return 0;
     }
-    freeStack(stack_3);
 }
-void moveStyleHanoi(int n, Stack *origin,Stack *auxiliary,Stack *destiny, FILE **outputFile){
+
+void moveStyleHanoi(int *numMovs, int n, Stack *origin,Stack *auxiliary,Stack *destiny, FILE **outputFile){
     if(n == 1){
         data block = pop(origin);
         if(verifyCapacity(destiny, block.weight)){
             //printf("%d %d\n", (origin)->type, (destiny)->type);
             for(int i=0;i<=block.repeat;i++){
+                *numMovs = *numMovs + 1;
+                if(*numMovs > 3000000){return;}
                 fprintf(*outputFile, "%d %d\n", (origin)->type, (destiny)->type);
             }
             push(destiny, block);
         }
         return;
     }else{
-        moveStyleHanoi(n-1, origin, destiny, auxiliary, outputFile);
+        moveStyleHanoi(numMovs,n-1, origin, destiny, auxiliary, outputFile);
         data block = pop(origin);
         if(verifyCapacity(destiny, block.weight)){
             //printf("%d %d\n", (origin)->type, (destiny)->type);
             for(int i=0;i<=block.repeat;i++){
+                *numMovs = *numMovs + 1;
+                if(*numMovs > 3000000){return;}
                 fprintf(*outputFile, "%d %d\n", (origin)->type, (destiny)->type);
             }
             push(destiny, block);
         }
-        moveStyleHanoi(n-1, auxiliary, origin, destiny, outputFile);
+        moveStyleHanoi(numMovs, n-1, auxiliary, origin, destiny, outputFile);
     }
 }
-/*
-void moveStyleHanoi(int n, Stack *origin,Stack *auxiliary,Stack *destiny){
-    if(n == 1){
-        printf("%d %d\n", (origin)->type, (destiny)->type);
-        push(destiny, pop(origin));
-        return;
-    }else{
-        moveStyleHanoi(n-1, origin, destiny, auxiliary);
-        printf("%d %d\n", (origin)->type, (destiny)->type);
-        push(destiny, pop(origin));
-        moveStyleHanoi(n-1, auxiliary, origin, destiny);
-    }
-}
-*/
+
 int verifyCapacity(Stack *stack, int weight){
     No *aux = stack->prox;
     unsigned long int sumWeight = weight;
@@ -112,7 +111,6 @@ int verifyOrder(Stack *stack){
     }
     return 1;
 }
-
 
 void createStackToMove(Stack *stack_1, Stack *new_stack, int *numBlocks){
     No *aux = stack_1->prox->prox, *ref = stack_1->prox;

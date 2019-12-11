@@ -12,8 +12,9 @@ void readFile(Stack **stack_1, FILE **inputFile);
     function to move the pyramid from origin
     to destiny and print it on a file
     param: origin stack, output file and the num of blocks
+    return: 1 if the pyr is moved, 0 otherwise
 */
-void movePyr(Stack *stack_1, FILE **outputFile, int numBlocks);
+int movePyr(Stack *stack_1, FILE **outputFile, int numBlocks);
 
 /*
     function to move a pyramid's block from origin
@@ -26,7 +27,7 @@ int moveBlock(Stack **origin, Stack **destiny);
     function to move a pyramid's with hanoi algorithm
     param: origin stack and destiny stack
 */
-void moveStyleHanoi(int n, Stack *origin,Stack *auxiliary,Stack *destiny, FILE **outputFile);
+void moveStyleHanoi(int *numMovs, int n, Stack *origin,Stack *auxiliary,Stack *destiny, FILE **outputFile);
 
 /*
     function to check if stack supports one more
@@ -35,8 +36,9 @@ void moveStyleHanoi(int n, Stack *origin,Stack *auxiliary,Stack *destiny, FILE *
 */
 int verifyCapacity(Stack *stack, int weight);
 
-int verifyOrder(Stack *stack);
-
-void mover(Stack **stack_1, Stack **stack_2);
-
+/*
+    function to create a stack with group 
+    of blocks
+    param: pointer to original stack, new stack, and the num of blocks
+*/
 void createStackToMove(Stack *stack_1, Stack *new_stack, int *numBlocks);
