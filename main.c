@@ -28,18 +28,6 @@ int main(){
                     printf("\nO numero de movimentos necessarios para mover essa piramide é superior a 3.000.000\n\n---------------------\n");
                 }
                 freeStack(stack_1);                
-                
-                /*if(numBlocks <= 21){//verificação de 3.000.000, pois (2^n)-1 quando n>21 é maior que 3.000.000 
-                    printf("\nInput file(weight and capacity): files/inputFiles/pyr%d.in\n\n", i);
-                    readFile(&stack_1, &inputF);
-                    createStackToMove(stack_1, stack_to_move, &numBlocks);
-                    invStack(&stack_to_move);
-                    movePyr(stack_to_move, &outputF, numBlocks);
-                    freeStack(stack_1);
-                    printf("\noutput file(movements): files/outputFiles/pyr%d.out\n\n---------------------\n", i);
-                }else{
-                    printf("Numero de movimentos nescessarios para mover a piramide excede 3.000.000\n");   
-                }*/
             }else{
                 printf("Erro ao criar arquivo pyr%d.out\n", i);
             }
